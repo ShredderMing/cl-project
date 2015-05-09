@@ -103,3 +103,38 @@
       (format t "removing tests...")
       (delete-file asd)
       (cl-fad:delete-directory-and-files dir))))
+
+@export
+(defun wizard ()
+  "A wizard to generate a common lisp project"
+  (let ((params nil)
+        (description '((:name . "Project name: ")
+                       (:description . "Short description for the new project: ")
+                       (:author  . "Your name: ")
+                       (:email . "Your Email: ")
+                       (:license . "License of the new project: ")
+                       (:depends-on . "Dependencies splite by space: ")
+                       (:path . "Finally give a path to your project: "))))
+    (loop for (key . value) in description
+          do (format t "~A" value)
+             (force-output)
+          if (eql key :depends-on)
+            do (setf params (cons key (cons (splite-sequence (read-line)) params)))
+          else
+            do (setf params (cons key (cons (read-line) params))))
+    (format t "Your settings are :")
+    (force-output)
+    (loop with lst = (reverse params)
+          for key in (cdr lst) by #'cddr
+          for value in lst by #'cddr
+          do (format t "~&~A: ~A" key value)
+          finally (format t "Confirm your settings[Y/n]? "))
+    (force-output)
+    (if (member (read-char) '(#\Newline #\Y #\y))
+        (apply #'make-project (second params) (cddr params)))))
+
+(defun splite-sequence (sequence &optional (delimiter #\Space))
+  (loop for start = 0 then (1+ end)
+        as end = (position delimiter sequence :start start)
+        collect (subseq sequence start end)
+        while end))

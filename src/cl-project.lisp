@@ -113,7 +113,7 @@
                        (:author  . "Your name: ")
                        (:email . "Your Email: ")
                        (:license . "License of the new project: ")
-                       (:depends-on . "Dependencies splite by space: ")
+                       (:depends-on . "Dependencies split by space: ")
                        (:path . "Finally give a path to your project: "))))
     (loop for (key . value) in description
           do (format t "~A" value)

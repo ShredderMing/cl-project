@@ -119,7 +119,7 @@
           do (format t "~A" value)
              (force-output)
           if (eql key :depends-on)
-            do (setf params (cons key (cons (splite-sequence (read-line)) params)))
+            do (setf params (cons key (cons (split-sequence (read-line)) params)))
           else
             do (setf params (cons key (cons (read-line) params))))
     (format t "Your settings are :")
@@ -133,7 +133,7 @@
     (if (member (read-char) '(#\Newline #\Y #\y))
         (apply #'make-project (second params) (cddr params)))))
 
-(defun splite-sequence (sequence &optional (delimiter #\Space))
+(defun split-sequence (sequence &optional (delimiter #\Space))
   (loop for start = 0 then (1+ end)
         as end = (position delimiter sequence :start start)
         collect (subseq sequence start end)
